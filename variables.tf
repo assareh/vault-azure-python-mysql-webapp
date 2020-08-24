@@ -1,52 +1,62 @@
-variable "prefix" {
-  default = "kapil"
+variable "appservicedocker" {
+  description = "The docker image to run as an app service"
+  default     = "assareh/transit-app-example:latest"
 }
 
-variable "location" {
-  default = "westeurope"
+variable "appserviceplantier" {
+  description = "The tier of app service plan"
+  default     = "S1/Standard"
 }
 
-variable "owner" {
-  default = "kapil"
+variable "client_id" {
+  description = "Azure Service Principal appId"
 }
 
 variable "client_secret" {
-  default = ""
-}
-variable "client_id" {
-  default = ""
+  description = "Azure Service Principal password"
 }
 
-variable "object_id" {
-  default = ""
+variable "common_tags" {
+  description = "Common tags to apply to cloud resources"
+  type        = map(string)
+  default = {
+    Purpose = "Hashidemos"
+  }
 }
+
+variable "license" {
+  description = "(Optional) Vault Enterprise license, if you have one"
+  default     = ""
+}
+
+variable "location" {
+  description = "Azure location in which to create resources"
+  default     = "West US 2"
+}
+
+variable "prefix" {
+  description = "Name prefix to add to the resources"
+  default     = "hashidemos"
+}
+
+variable "public_key" {
+  description = "Your SSH public key (e.g. ssh-rsa ...)"
+}
+
 variable "subscription_id" {
-  default = ""
+  description = "Azure Service Principal subscription ID"
 }
 
 variable "tenant_id" {
-  default = ""
+  description = "Azure Service Principal tenant"
 }
 
-variable "vault_download_url" {
-  default = "https://releases.hashicorp.com/vault/1.4.3+ent/vault_1.4.3+ent_linux_amd64.zip"
-}
-variable "public_key" {
-  default = ""
-}
-variable "vm_size" {
-  default = "Standard_D2s_v3"
-}
-
-variable "mysql_username" {
-  default = "vault"
-}
-variable "mysql_password" {
-  default = ""
-}
-variable "license" {
-  default=""
-}
 variable "vault_namespace" {
-  default="root"
+  description = "(Optional) Vault Namespace to use"
+  default     = "root"
+}
+
+variable "vm_size" {
+  description = "Azure VM size to provision"
+  default     = "Standard_B2s"
 }

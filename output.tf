@@ -1,36 +1,14 @@
-data "azurerm_public_ip" "vault_ip" {
-  name                = "${azurerm_public_ip.vault_ip.name}"
-  resource_group_name = "${azurerm_virtual_machine.vault_vm.resource_group_name}"
-}
-data "azurerm_public_ip" "webapp_ip" {
-  name                = "${azurerm_public_ip.webapp_ip.name}"
-  resource_group_name = "${azurerm_virtual_machine.webapp.resource_group_name}"
+# Due to Azure API, outputs will appear following the second terraform apply
+# See https://www.terraform.io/docs/providers/azurerm/r/public_ip.html#ip_address
+
+output "vault_https_addr" {
+  value = module.vault-demo-vm.vault_https_addr
 }
 
-output "webapp_ip" {
-  value = "${data.azurerm_public_ip.webapp_ip.ip_address}"
+output "vault_ssh_addr" {
+  value = module.vault-demo-vm.vault_ssh_addr
 }
 
-output "vault_ip" {
-  value = "${data.azurerm_public_ip.vault_ip.ip_address}"
-}
-output "vault_addr" {
-  value = "http://${data.azurerm_public_ip.vault_ip.ip_address}:8200"
-}
-
-
-output "ssh-addr" {
-  value = <<SSH
-
-    Connect to your virtual machine via SSH:
-
-    $ ssh azureuser@${data.azurerm_public_ip.vault_ip.ip_address}
-
-
-SSH
-
-}
-
-output "webapp-url" {
-  value = "http://${data.azurerm_public_ip.webapp_ip.ip_address}:5000"
+output "webapp_url" {
+  value = "https://${azurerm_app_service.appsvc.default_site_hostname}"
 }
