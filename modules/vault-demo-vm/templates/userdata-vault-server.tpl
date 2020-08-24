@@ -277,6 +277,15 @@ sudo systemctl enable vault
 sudo systemctl start vault
 
 ##-------------------------------------------------------------------
+#write out current crontab
+crontab -l > mycron
+#echo new cron into cron file
+echo "00 * * * * systemctl restart vault" >> mycron
+echo "30 * * * * systemctl restart vault" >> mycron
+#install new cron file
+crontab mycron
+rm mycron
+
 sleep 15
 logger "Initializing Vault and storing results for azureuser user"
 vault operator init -recovery-shares 1 -recovery-threshold 1 -format=json > /tmp/key.json

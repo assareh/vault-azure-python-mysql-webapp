@@ -15,4 +15,3 @@ Notes:
 * The Vault VM takes a few minutes to configure after provisioning has completed.
 * Due to the way IP addresses are assigned in Azure, outputs will appear following the second terraform apply. Per https://www.terraform.io/docs/providers/azurerm/r/public_ip.html#ip_address
 * If you'd like to access the Vault demo VM directly, the root token will be saved in the azureuser home folder of the Vault demo VM.
-* Since this demo uses the Vault Enterprise binary without a valid license to enable the [Transform secrets engine](https://www.vaultproject.io/docs/secrets/transform), Vault will automatically seal itself after 30 minutes. Vault can be restarted from the demo VM by running `sudo systemctl restart vault`.

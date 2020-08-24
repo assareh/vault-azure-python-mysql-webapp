@@ -114,7 +114,7 @@ resource "azurerm_app_service" "appsvc" {
     "VAULT_AUTH_METHOD"                   = "AZURE_JWT"
     "VAULT_TRANSIT_PATH"                  = "data_protection/transit"
     "VAULT_TRANSFORM_PATH"                = "data_protection/transform"
-    "VAULT_DATABASE_CREDS_PATH"           = "data_protection/database/roles/vault-demo-app-long"
+    "VAULT_DATABASE_CREDS_PATH"           = "data_protection/database/creds/vault-demo-app-long"
     "MYSQL_ADDR"                          = "${module.vault-demo-vm.private_ip}"
   }
 }
