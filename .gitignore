@@ -8,3 +8,5 @@
 # .tfvars files
 *.tfvars
 .env
+
+remote_backend.tf
