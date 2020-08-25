@@ -308,7 +308,7 @@ export VAULT_TOKEN=$VAULT_TOKEN
 logger "Waiting for Vault to finish preparations (10s)"
 sleep 10
 
-logger "Creating a policy"
+logger "Creating policies"
 sudo cat << 'EOF' > /tmp/webapppolicy.hcl
 path "data_protection/database/creds/vault-demo-app-long" {
     capabilities = ["read"]
@@ -338,6 +338,20 @@ path "data_protection/masking/transform/encode/ccn" {
     capabilities = ["create", "read", "update"]
 }
 EOF
+
+sudo cat << 'EOF' > /tmp/cidr-policy.sentinel
+import "sockaddr"
+
+cidrcheck = rule {
+    sockaddr.is_contained(request.connection.remote_addr, "10.0.2.254/32")
+}
+
+main = rule {
+    cidrcheck
+}
+EOF
+
+POLICY=$(base64 /tmp/cidr-policy.sentinel)
 
 logger "Configuring auth methods and secrets engines"
 set -v
@@ -423,7 +437,7 @@ logger "Transit secret engine is setup"
 #enable the transform secret engine
 vault secrets enable  -path=data_protection/transform transform
 
-#Define a rol ssn with transformation ssn
+#Define a role ssn with transformation ssn
 vault write data_protection/transform/role/ssn transformations=ssn
 
 #create a transformation of type fpe using built in template for social security number and assign role ssn to it that we created earlier
@@ -456,13 +470,20 @@ vault read  data_protection/masking/transform/transformation/ccn
 #test if you are able to mask a Credit Card number
 vault write data_protection/masking/transform/encode/ccn value=1111-2211-3333-1111
 
+# apply egp sentinel policy
+vault write sys/policies/egp/cidr-policy \
+        policy="$POLICY" \
+        paths="data_protection/*" \
+        enforcement_level="hard-mandatory"
 
+# test azure auth
 vault write auth/azure/login role="dev-role" \
   jwt="$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F'  -H Metadata:true -s | jq -r .access_token)" \
   subscription_id="${subscription_id}" \
   resource_group_name="${resource_group_name}" \
   vm_name="${vault_vm_name}"
 
+# test jwt auth
 vault write auth/jwt/login role="dev-role" \
   jwt="$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F'  -H Metadata:true -s | jq -r .access_token)" \
 

@@ -10,5 +10,11 @@ output "vault_ssh_addr" {
 }
 
 output "webapp_url" {
-  value = "https://${azurerm_app_service.appsvc.default_site_hostname}"
+  value = <<HTTPS
+
+    Please note the first time you try to view the web app, it may take
+    a couple minutes for the container to boot.
+
+    "https://${azurerm_app_service.appsvc.default_site_hostname}"
+HTTPS
 }
