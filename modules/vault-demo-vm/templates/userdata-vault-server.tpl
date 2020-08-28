@@ -501,21 +501,22 @@ vault read  data_protection/masking/transform/transformation/ccn
 #test if you are able to mask a Credit Card number
 vault write data_protection/masking/transform/encode/ccn value=1111-2211-3333-1111
 
-# apply egp sentinel policy
-vault write sys/policies/egp/cidr-policy \
-        policy="$POLICY" \
-        paths="data_protection/*" \
-        enforcement_level="hard-mandatory"
+# # apply egp sentinel policy
+# vault write sys/policies/egp/cidr-policy \
+#         policy="$POLICY" \
+#         paths="data_protection/*" \
+#         enforcement_level="hard-mandatory"
 
-# test azure auth
+# test azure auth - this will work
 vault write auth/azure/login role="dev-role" \
   jwt="$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F'  -H Metadata:true -s | jq -r .access_token)" \
   subscription_id="${subscription_id}" \
   resource_group_name="${resource_group_name}" \
   vm_name="${vault_vm_name}"
 
-# test jwt auth
+# test jwt auth - this will fail
 vault write auth/jwt/login role="dev-role" \
   jwt="$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F'  -H Metadata:true -s | jq -r .access_token)" \
 
+logger "azure auth should work, jwt auth should fail"
 logger "Complete"
