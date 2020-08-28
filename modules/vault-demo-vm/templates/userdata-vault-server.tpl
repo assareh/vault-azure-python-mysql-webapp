@@ -339,19 +339,20 @@ path "data_protection/masking/transform/encode/ccn" {
 }
 EOF
 
-sudo cat << 'EOF' > /tmp/cidr-policy.sentinel
-import "sockaddr"
+# # not using sentinel now, replaced with bound CIDR on dev-role
+# sudo cat << 'EOF' > /tmp/cidr-policy.sentinel
+# import "sockaddr"
 
-cidrcheck = rule {
-    sockaddr.is_contained(request.connection.remote_addr, "10.0.2.254/32")
-}
+# cidrcheck = rule {
+#     sockaddr.is_contained(request.connection.remote_addr, "10.0.2.254/32")
+# }
 
-main = rule {
-    cidrcheck
-}
-EOF
+# main = rule {
+#     cidrcheck
+# }
+# EOF
 
-POLICY=$(base64 /tmp/cidr-policy.sentinel)
+# POLICY=$(base64 /tmp/cidr-policy.sentinel)
 
 logger "Configuring auth methods and secrets engines"
 set -v
@@ -369,15 +370,45 @@ vault policy write webapp /tmp/webapppolicy.hcl
 
 vault auth enable jwt
 
-vault write auth/jwt/config oidc_discovery_url=https://sts.windows.net/${tenant_id}/
+vault write auth/jwt/config oidc_discovery_url=https://sts.windows.net/${tenant_id}/ bound_issuer=https://sts.windows.net/${tenant_id}/
 
-vault write auth/jwt/role/dev-role \
-      policies=webapp \
-      bound_audiences=https://management.azure.com/ \
-      user_claim=sub \
-      role_type=jwt \
-      token_max_ttl=24h \
-      bound_subject=${client_msi}
+cat <<EOF >payload.json
+{
+  "bound_audiences": "https://management.azure.com/",
+  "bound_claims": {
+    "idp": "https://sts.windows.net/${tenant_id}/",
+    "oid": "${client_msi}",
+    "tid": "${tenant_id}"
+  },
+  "bound_subject": "${client_msi}",
+  "claim_mappings": {
+    "appid": "application_id",
+    "xms_mirid": "resource_id"
+  },
+  "policies": ["webapp"],
+  "role_type": "jwt",
+  "token_bound_cidrs": ["10.0.2.254/32"],
+  "token_max_ttl": "24h",
+  "user_claim": "sub"
+}
+EOF
+
+curl \
+    --header "X-Vault-Token: $VAULT_TOKEN" \
+    --header "X-Vault-Namespace: $VAULT_NAMESPACE" \
+    --insecure \
+    --request POST \
+    --data @payload.json \
+    $VAULT_ADDR/v1/auth/jwt/role/dev-role
+
+# # not using this any more, replaced with above
+# vault write auth/jwt/role/dev-role \
+#       policies=webapp \
+#       bound_audiences=https://management.azure.com/ \
+#       user_claim=sub \
+#       role_type=jwt \
+#       token_max_ttl=24h \
+#       bound_subject=${client_msi}
 
 vault auth enable azure
 
