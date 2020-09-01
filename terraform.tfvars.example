@@ -6,7 +6,6 @@ common_tags = {
     Purpose = "Demo Terraform and Vault"
     Terraform = "true"
     }
-license=""
 location="westeurope"
 prefix="kapil-webapp" # may only contain alphanumeric characters and dashes and must be 21 chars or less
 public_key=""
