@@ -112,11 +112,11 @@ resource "azurerm_app_service" "appsvc" {
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
     "VAULT_ADDR"                          = "https://${module.vault-demo-vm.private_ip}:8200"
     "VAULT_NAMESPACE"                     = var.vault_namespace
-    "VAULT_TRANSIT_PATH"           = "data_protection/transit"
-    "VAULT_TRANSFORM_PATH"         = "data_protection/transform"
-    "VAULT_TRANSFORM_MASKING_PATH" = "data_protection/masking/transform"
-    "VAULT_DATABASE_CREDS_PATH"    = "data_protection/database/creds/vault-demo-app-long"
-    "MYSQL_ADDR"                   = "${module.vault-demo-vm.private_ip}"
+    "VAULT_TRANSIT_PATH"                  = "data_protection/transit"
+    "VAULT_TRANSFORM_PATH"                = "data_protection/transform"
+    "VAULT_TRANSFORM_MASKING_PATH"        = "data_protection/masking/transform"
+    "VAULT_DATABASE_CREDS_PATH"           = "data_protection/database/creds/vault-demo-app-long"
+    "MYSQL_ADDR"                          = "${module.vault-demo-vm.private_ip}"
   }
 }
 
