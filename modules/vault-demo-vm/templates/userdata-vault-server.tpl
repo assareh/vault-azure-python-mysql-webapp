@@ -301,6 +301,13 @@ sudo chown azureuser:azureuser /home/azureuser/.vault-token
 echo $(cat /tmp/key.json | jq -r ".recovery_keys_b64[]") > /home/azureuser/recovery_key
 sudo chown azureuser:azureuser /home/azureuser/recovery_key
 
+cat << EOF > /etc/vault.d/vaultrc
+#!/bin/bash
+export VAULT_ROOT_TOKEN=$VAULT_TOKEN
+export VAULT_ADDR=https://127.0.0.1:8200
+export VAULT_SKIP_VERIFY=true
+EOF
+
 logger "Setting VAULT_ADDR and VAULT_TOKEN"
 export VAULT_ADDR=https://127.0.0.1:8200
 export VAULT_TOKEN=$VAULT_TOKEN
