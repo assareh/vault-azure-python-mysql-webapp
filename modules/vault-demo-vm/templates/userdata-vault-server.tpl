@@ -370,7 +370,9 @@ vault policy write webapp /tmp/webapppolicy.hcl
 
 vault auth enable jwt
 
-vault write auth/jwt/config oidc_discovery_url=https://sts.windows.net/${tenant_id}/ bound_issuer=https://sts.windows.net/${tenant_id}/
+vault write auth/jwt/config \
+            oidc_discovery_url=https://sts.windows.net/${tenant_id}/ \
+            bound_issuer=https://sts.windows.net/${tenant_id}/
 
 cat <<EOF >payload.json
 {
@@ -388,7 +390,7 @@ cat <<EOF >payload.json
   "policies": ["webapp"],
   "role_type": "jwt",
   "token_bound_cidrs": ["10.0.2.254/32"],
-  "token_max_ttl": "24h",
+  "token_ttl": "24h",
   "user_claim": "sub"
 }
 EOF
@@ -399,10 +401,10 @@ curl \
     --insecure \
     --request POST \
     --data @payload.json \
-    $VAULT_ADDR/v1/auth/jwt/role/dev-role
+    $VAULT_ADDR/v1/auth/jwt/role/webapp-role
 
 # # not using this any more, replaced with above
-# vault write auth/jwt/role/dev-role \
+# vault write auth/jwt/role/webapp-role \
 #       policies=webapp \
 #       bound_audiences=https://management.azure.com/ \
 #       user_claim=sub \
@@ -515,7 +517,7 @@ vault write auth/azure/login role="dev-role" \
   vm_name="${vault_vm_name}"
 
 # test jwt auth - this will fail
-vault write auth/jwt/login role="dev-role" \
+vault write auth/jwt/login role="webapp-role" \
   jwt="$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F'  -H Metadata:true -s | jq -r .access_token)" \
 
 logger "azure auth should work, jwt auth should fail"
