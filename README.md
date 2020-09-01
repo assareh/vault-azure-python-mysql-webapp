@@ -73,4 +73,4 @@ terraform show
 * Vault PKI certs: /opt/vault/tls/
 * Vault data: /opt/vault/data/
 * Vault audit log in /var/log/vault_audit.log
-* You can view the webapp logs using the Azure CLI with `az webapp log tail` after enabling [logging](https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-diagnostic-logs).
+* You can view the webapp logs using the Azure CLI with `az webapp log tail` after enabling [logging](https://docs.microsoft.com/en-us/azure/app-service/troubleshoot-diagnostic-logs), or in the Azure Portal on the App Service > Container Settings pane.
