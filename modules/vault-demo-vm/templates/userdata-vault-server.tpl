@@ -398,6 +398,7 @@ cat <<EOF >payload.json
   "role_type": "jwt",
   "token_bound_cidrs": ["10.0.2.254/32"],
   "token_ttl": "24h",
+  "token_type": "batch",
   "user_claim": "sub"
 }
 EOF
@@ -442,7 +443,7 @@ vault write data_protection/database/config/wsmysqldatabase \
 vault write data_protection/database/roles/vault-demo-app-long \
     db_name=wsmysqldatabase \
     creation_statements="CREATE USER '{{name}}'@'%' IDENTIFIED BY '{{password}}';GRANT ALL ON my_app.* TO '{{name}}'@'%';" \
-    default_ttl="1h" \
+    default_ttl="24h" \
     max_ttl="24h"
 
 # Create a role with a shorter TTL
