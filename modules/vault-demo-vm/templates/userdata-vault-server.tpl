@@ -397,7 +397,7 @@ cat <<EOF >payload.json
   "policies": ["webapp"],
   "role_type": "jwt",
   "token_bound_cidrs": ["10.0.2.254/32"],
-  "token_ttl": "24h",
+  "token_ttl": "768h",
   "token_type": "batch",
   "user_claim": "sub"
 }
