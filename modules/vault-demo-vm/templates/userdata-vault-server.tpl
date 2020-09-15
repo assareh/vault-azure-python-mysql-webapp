@@ -301,6 +301,18 @@ sudo chown azureuser:azureuser /home/azureuser/.vault-token
 echo $(cat /tmp/key.json | jq -r ".recovery_keys_b64[]") > /home/azureuser/recovery_key
 sudo chown azureuser:azureuser /home/azureuser/recovery_key
 
+cat << EOF > /home/azureuser/vault_helpers.bash
+# vault_helpers.bash
+# functions to speed up common tasks when working with HashiCorp Vault
+
+# load token from file
+loadtoken() {
+  export VAULT_TOKEN=`cat /home/azureuser/.vault-token`
+}
+EOF
+
+echo 'source vault_helpers.bash' >> /home/azureuser/.bashrc
+
 cat << EOF > /etc/vault.d/vaultrc
 #!/bin/bash
 export VAULT_ROOT_TOKEN=$VAULT_TOKEN
@@ -526,7 +538,7 @@ vault write auth/azure/login role="dev-role" \
 
 # test jwt auth - this will fail
 vault write auth/jwt/login role="webapp-role" \
-  jwt="$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F'  -H Metadata:true -s | jq -r .access_token)" \
+  jwt="$(curl 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fmanagement.azure.com%2F'  -H Metadata:true -s | jq -r .access_token)"
 
 logger "azure auth should work, jwt auth should fail"
 logger "Complete"
