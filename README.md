@@ -1,5 +1,7 @@
 # Dynamic Secrets Retrieval in Microsoft Azure App Service with HashiCorp Vault
 
+Read the companion [blog post](https://medium.com/hashicorp-engineering/dynamic-secrets-retrieval-in-microsoft-azure-app-service-with-hashicorp-vault-e3afee4856f?source=collection_home---5------6-----------------------) on the HashiCorp Solutions Engineering blog!
+
 This HashiCorp [Terraform](https://terraform.io) and [Vault](https://vaultproject.io) demo includes the following:
 1. A Python webapp running on Azure App Service (code is [here](https://github.com/assareh/transit-app-example/))
 2. A MySQL database used by the webapp (running as a Docker container on the Vault demo VM)
