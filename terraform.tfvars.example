@@ -1,13 +1,10 @@
-client_id=""
-client_secret=""
-common_tags = {
-    Name = "-hashidemos"
-    Owner = ""
-    Purpose = "Demo Terraform and Vault"
-    Terraform = "true"
-    }
-location="westeurope"
-prefix="kapil-webapp" # may only contain alphanumeric characters and dashes and must be 21 chars or less
-public_key=""
-subscription_id=""
-tenant_id=""
+prefix              = "andy-webapp"
+location            = "westus2"
+owner               = "andy"
+public_key          = ""
+subscription_id     = ""
+tenant_id           = ""
+client_id           = ""
+client_secret       = ""
+vault_client_id     = ""
+vault_client_secret = ""

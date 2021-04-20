@@ -1,62 +1,63 @@
-variable "appservicedocker" {
-  description = "The docker image to run as an app service"
-  default     = "assareh/transit-app-example:latest"
-}
-
-variable "appserviceplantier" {
-  description = "The tier of app service plan"
-  default     = "S1/Standard"
-}
-
-variable "client_id" {
-  description = "Azure Service Principal appId"
-}
-
-variable "client_secret" {
-  description = "Azure Service Principal password"
-}
-
-variable "common_tags" {
-  description = "Common tags to apply to cloud resources"
-  type        = map(string)
-  default = {
-    Purpose = "Hashidemos"
-  }
-}
-
-variable "license" {
-  description = "(Optional) Vault Enterprise license, if you have one"
-  default     = ""
+variable "prefix" {
+  default = "kapil"
 }
 
 variable "location" {
-  description = "Azure location in which to create resources"
-  default     = "West US 2"
+  default = "westeurope"
 }
 
-variable "prefix" {
-  description = "Name prefix to add to the resources"
-  default     = "hashidemos"
+variable "owner" {
+  default = "kapil"
 }
 
-variable "public_key" {
-  description = "Your SSH public key (e.g. ssh-rsa ...)"
+variable "vault_client_secret" {
+  default = ""
+}
+
+variable "vault_client_id" {
+  default = ""
+}
+
+variable "client_secret" {
+  default = ""
+}
+
+variable "client_id" {
+  default = ""
 }
 
 variable "subscription_id" {
-  description = "Azure Service Principal subscription ID"
+  default = ""
 }
 
 variable "tenant_id" {
-  description = "Azure Service Principal tenant"
+  default = ""
 }
 
-variable "vault_namespace" {
-  description = "(Optional) Vault Namespace to use"
-  default     = "root"
+variable "vault_download_url" {
+  default = "https://releases.hashicorp.com/vault/1.4.3+ent/vault_1.4.3+ent_linux_amd64.zip"
+}
+
+variable "public_key" {
+  default = ""
 }
 
 variable "vm_size" {
-  description = "Azure VM size to provision"
-  default     = "Standard_B2s"
+  default = "Standard_D2s_v3"
+}
+
+variable "mysql_username" {
+  default = "vault"
+}
+
+variable "mysql_password" {
+  default = "H@Sh1CoR3!"
+}
+
+variable "license" {
+  default = ""
+}
+
+variable "vault_namespace" {
+  default = "root"
 }
