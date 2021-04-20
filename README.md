@@ -38,11 +38,11 @@ echo "${VAULT_AZURE_CREDS}"
 You should see something like this:
 ```
 {
-  "appId": "28372dcc-acc7-4ffd-9a84-72e72724e093",
+  "appId": "28372dcc-acc7-32cs-9a84-7asdfasdfdf3",
   "displayName": "Vault-Azure-Auth-andy-test",
   "name": "http://Vault-Azure-Auth-andy-test",
-  "password": "hvRMg4GE_qpADS5UsBbFHiviiJiu-H_KRc",
-  "tenant": "0e3e2e88-8caf-41ca-b4da-e3b33b6c52ec"
+  "password": "hvRMg4GEasdfaadfasdfasdvcaga-H_KRc",
+  "tenant": "0e3e2e88-8caf-41ca-b4da-asdfasdf32ad"
 }
 ```
 **NOTE**: `password` is a secret. Guard it accordingly.
